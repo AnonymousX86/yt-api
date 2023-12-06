@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "yt-api-playlists"
+version = "1.0.0"
+authors = [
+    { name="AnonymousX86", email="jakub.suchenek.25@gmail.com" }
+]
+description = "YouTube API wrapper for playlists."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+
+[project.urls]
+Homepage = "https://github.com/AnonymousX86/yt-api"
+Issues = "https://github.com/AnonymousX86/yt-api/issues"

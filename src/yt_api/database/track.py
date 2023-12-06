@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from sqlalchemy import Column, inspect, Integer, String
-from sqlalchemy.orm import Session
+from sqlalchemy import Column, Integer, String
 
-from core import Base, create_session
+from .core import Base, create_session
 
 
 class Track(Base):
@@ -43,27 +42,5 @@ class Track(Base):
                 track = session.query(cls).filter_by(youtube_id=youtube_id).first()
             return track
 
-
-def test_track(session: Session) -> bool:
-    inspector = inspect(session.bind)
-    return 'tracks' in inspector.get_table_names()
-
-
-if __name__ == '__main__':
-    from logging import basicConfig, getLogger, INFO
-    from rich.logging import RichHandler
-
-    basicConfig(
-        level=INFO,
-        format='%(message)s',
-        datefmt='[%X]',
-        handlers=[RichHandler(markup=True, rich_tracebacks=True)]
-    )
-    log = getLogger('sqlalchemy.engine')
-    log.setLevel(INFO)
-
-    session = create_session()
-    if (valid := test_track(session)):
-        log.info('The `tracks` table exists and is correctly structured.')
-    else:
-        log.error('The `tracks` table does not exist or is not correctly structured.')
+    def remove(self) -> None:
+        self.remove_track(spotify_id=self.spotify_id)
