@@ -70,9 +70,10 @@ if __name__ == '__main__':
     # Connect to YouTube
     youtube = get_authenticated_service()
 
-    playlist_id = 'PLHpqNKpoWiNX5Qbl0syonrL3El3Ojt9Kf'
-    video_id = 'dQw4w9WgXcQ'
+    playlist_id = input('Playlist ID: ')
+    video_id = input('Video ID: ') or 'dQw4w9WgXcQ'
 
+    # Add video to playlist
     try:
         playlist_item = add_video(youtube, playlist_id, video_id)
         if playlist_item:

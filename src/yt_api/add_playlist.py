@@ -1,12 +1,20 @@
 # -*- coding: utf-8 -*-
 """
-Creates a private playlist in the authorizing user's YouTube channel.
+Creates a playlist in the authorizing user's YouTube channel.
 """
+from enum import Enum
+
 from googleapiclient.discovery import Resource
 from googleapiclient.errors import HttpError
 
 from authentication import get_authenticated_service
 from models import Localization, Thumbnail
+
+
+class PrivacyStatus(Enum):
+    PRIVATE = 'private'
+    PUBLIC = 'public'
+    UNLISTED = 'unlisted'
 
 
 class Playlist:
@@ -44,8 +52,15 @@ class Playlist:
 
 
 
-def add_playlist(youtube: Resource, title: str, description: str) -> Playlist:
+def add_playlist(
+        youtube: Resource,
+        title: str,
+        description: str,
+        privacy_status: PrivacyStatus = None
+    ) -> Playlist:
     """Creates playlist then returns it as `Playlist`."""
+    if not privacy_status:
+        privacy_status = PrivacyStatus.UNLISTED
     response: dict = youtube.playlists().insert(
         part = 'snippet,status',
         body = dict(
@@ -54,7 +69,7 @@ def add_playlist(youtube: Resource, title: str, description: str) -> Playlist:
                 description = description
             ),
             status = dict(
-                privacyStatus = 'private'
+                privacyStatus = privacy_status.value
             )
         )
     ).execute()
@@ -66,8 +81,8 @@ if __name__ == '__main__':
     # Connect to YouTube
     youtube = get_authenticated_service()
 
-    playlist_title = 'Test playlist'
-    playlist_description = 'Playlist created with YouTube API.'
+    playlist_title = input('Playlist title: ') or 'Test playlist'
+    playlist_description = input('Playlist description: ') or 'Playlist created with `yt_api` by AnonymousX86.'
 
     # Create playlist
     try:
